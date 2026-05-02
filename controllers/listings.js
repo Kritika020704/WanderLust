@@ -1,7 +1,7 @@
 const Listing = require("../models/listing");
 const axios = require("axios");
 
-async function getCoordinates(location) {
+/*async function getCoordinates(location) {
   const url = "https://nominatim.openstreetmap.org/search";
 
   const response = await axios.get(url, {
@@ -23,7 +23,34 @@ async function getCoordinates(location) {
 
   return [parseFloat(lon), parseFloat(lat)]; // [lng, lat]
 }
+*/
+async function getCoordinates(location) {
+  try {
+    const url = "https://nominatim.openstreetmap.org/search";
 
+    const response = await axios.get(url, {
+      params: {
+        q: location,
+        format: "json",
+        limit: 1
+      },
+      headers: {
+        "User-Agent": "wanderlust-app/1.0 (kritikagupta361@gmail.com)"
+      }
+    });
+
+    if (response.data.length === 0) {
+      return [0, 0]; // default coords if not found
+    }
+
+    const { lat, lon } = response.data[0];
+    return [parseFloat(lon), parseFloat(lat)];
+
+  } catch (err) {
+    console.log("Geocoding failed:", err.message);
+    return [0, 0]; // don't crash the server
+  }
+}
 //module.exports.index = async (req, res) => {
   //const listings = await Listing.find({});
     //res.render("listings/index", { listings });
