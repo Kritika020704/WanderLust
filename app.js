@@ -80,10 +80,10 @@ app.use("/listings", listingRoutes);
 app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", userRoutes);
 
-// 404 handler (after ALL routes)
-//app.use((req, res, next) => {
-  //next(new ExpressError(404, "Page Not Found"));
-//});
+//404 handler (after ALL routes)
+app.use((req, res, next) => {
+  next(new ExpressError(404, "Page Not Found"));
+});
 
 // Error handler (always LAST)
 app.use((err, req, res, next) => {
