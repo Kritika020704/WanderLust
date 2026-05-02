@@ -1,22 +1,20 @@
 const cloudinary = require("cloudinary").v2;
-const multerStorageCloudinary = require("multer-storage-cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const CloudinaryStorage = multerStorageCloudinary.CloudinaryStorage;
-
-// config
+// configure cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-// storage
+// create storage
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,   // 👈 THIS is important
-  params: {
+  cloudinary: cloudinary,
+  params: async (req, file) => ({
     folder: "wanderlust_DEV",
-    allowed_formats: ["png", "jpg", "jpeg"], // 👈 also fixed spelling
-  },
+    allowed_formats: ["png", "jpg", "jpeg"],
+  }),
 });
 
 module.exports = {
