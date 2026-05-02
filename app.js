@@ -33,7 +33,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("layout", "layouts/boilerplate");
 
 const sessionOptions = {
-  secret: "mysupersecretstring",
+  secret: process.env.SESSION_SECRET || "fallbacksecret",
+  //secret: "mysupersecretstring",
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -88,6 +89,11 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { message });
 });
 
-app.listen(8080, () => {
-  console.log("Server is listening on port 8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
+//app.listen(8080, () => {
+  //console.log("Server is listening on port 8080");
+//});
